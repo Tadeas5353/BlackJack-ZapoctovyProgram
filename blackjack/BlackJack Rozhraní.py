@@ -16,6 +16,8 @@ class Balicek:
         self.balicek=[]
     def Zamichat(self):
         random.shuffle(self.balicek)
+
+# Tato funkce vytváří nový balíček pomocí všech kombincí barev a typů karet.
     def Vytvor_novy(self):
         self.balicek.clear()
         for i in range (Pocet_balicku):
@@ -48,6 +50,10 @@ class Hrac():
         self.SBJ2=SBJ2
         self.S11E1=S11E1
         self.S11E2=S11E2
+
+# Funkce sloužící k rozhodnutí prvního tahu hráče na základě údaje o jeho kartách, skóre a kartě dealera. Jsou rozlišeny speciální případy, kdy hráč má dvojici 
+# karet stejné hodnoty a kdy hráč má v ruce eso.  Rozhodování probíhá v závislosti na hráčově úrovni.
+
     def Rozhodovaci_Funkce_Prvni_Tah(self, dealer):
         Ta_Druha_K_Esu=0
         par=False
@@ -307,7 +313,9 @@ class Hrac():
                 return random.choice(["Stand","Hit","Double","Split"])
             else:
                 return random.choice(["Stand","Hit","Double"])             
-        
+
+# Funkce která u hráčů rozhoduje, zda se pojistí, či nikoliv. V závislosti na jejich úrovni. 
+
     def pojistovaci_funkce(self):
         if self.uroven==4:
             pojistka="ne"
@@ -322,7 +330,7 @@ class Hrac():
         else:
             return False
 
-def vyhodnoceni(hrac, dealer, sazka, Pojisten, BlackJack, Dealeruv_BlackJack, jmeno):
+def vyhodnoceni(hrac, dealer, sazka, Pojisten, BlackJack, Dealeruv_BlackJack):
     if BlackJack and Dealeruv_BlackJack:      
         if Pojisten:
             return sazka*2
@@ -338,6 +346,8 @@ def vyhodnoceni(hrac, dealer, sazka, Pojisten, BlackJack, Dealeruv_BlackJack, jm
         if Pojisten and Dealeruv_BlackJack:
             return sazka
         return 0
+
+# Funkce, která rozhoduje o tazích hráče v závislosti na jeho skóre a Dealerově kartě. Pro každého hráče rozhoduje zvlášť.
 
 def Rozhodovaci_funkce(uroven,skore,dealer):
 
@@ -389,6 +399,86 @@ def Rozhodovaci_funkce(uroven,skore,dealer):
     else:
         return random.choice(["Stand","Hit"])
 
+# Funkce vrátí barvu framu hráče, který byl jako poslední na tahu. Též zavře tlačítko, které spustilo tuto funkci. Dále hra buď nechá proběhnout dealerův tah
+# nebo nastaví hodnotu dealeruv_blackjack na True
+
+def Dealeruv_tah():
+
+    Spustit_vyhodnocovani.place(relx=1.0, rely=1.0, anchor="se",x=-10, y=-10)
+    Zacit_dealeruv_tah.place_forget()
+    Ukazatel_BlackJacku.pack_forget()
+
+    if Pocet_hracu==1:
+        Okno_hrac_1.config(bg="#eddd72")
+        Jmeno_hrac_1.config(bg="#eddd72")
+        Zobrazeni_karet_hrace_1.config(bg="#eddd72")
+        Zobrazeni_sazky_hrce_1.config(bg="#eddd72")
+        Zobrazeni_rozpoctu_hrace_1.config(bg="#eddd72")
+        Zobrazeni_skore_hrace_1.config(bg="#eddd72")
+    elif Pocet_hracu==2:
+        Okno_hrac_2.config(bg="#eddd72")
+        Jmeno_hrac_2.config(bg="#eddd72")
+        Zobrazeni_karet_hrace_2.config(bg="#eddd72")
+        Zobrazeni_sazky_hrce_2.config(bg="#eddd72")
+        Zobrazeni_rozpoctu_hrace_2.config(bg="#eddd72")
+        Zobrazeni_skore_hrace_2.config(bg="#eddd72")  
+    elif Pocet_hracu==3:
+        Okno_hrac_3.config(bg="#eddd72")
+        Jmeno_hrac_3.config(bg="#eddd72")
+        Zobrazeni_karet_hrace_3.config(bg="#eddd72")
+        Zobrazeni_sazky_hrce_3.config(bg="#eddd72")
+        Zobrazeni_rozpoctu_hrace_3.config(bg="#eddd72")
+        Zobrazeni_skore_hrace_3.config(bg="#eddd72") 
+    elif Pocet_hracu==4:
+        Okno_hrac_4.config(bg="#eddd72")
+        Jmeno_hrac_4.config(bg="#eddd72")
+        Zobrazeni_karet_hrace_4.config(bg="#eddd72")
+        Zobrazeni_sazky_hrce_4.config(bg="#eddd72")
+        Zobrazeni_rozpoctu_hrace_4.config(bg="#eddd72")
+        Zobrazeni_skore_hrace_4.config(bg="#eddd72") 
+    else:
+        Okno_hrac_5.config(bg="#eddd72")
+        Jmeno_hrac_5.config(bg="#eddd72")
+        Zobrazeni_karet_hrace_5.config(bg="#eddd72")
+        Zobrazeni_sazky_hrce_5.config(bg="#eddd72")
+        Zobrazeni_rozpoctu_hrace_5.config(bg="#eddd72")
+        Zobrazeni_skore_hrace_5.config(bg="#eddd72") 
+
+    global Dealerovy_karty
+    global Hraci_balicek
+    global Dealerovo_skore
+
+    if Dealeruv_BlackJack:
+        Ukazatel_BlackJacku.config(text="Dealer má BLACKJACK!")
+        Ukazatel_BlackJacku.pack()
+        Zobrazeni_dealerovych_karet.config(text="Karty: "+konvertor_balicku(Dealerovy_karty))
+        Zobrazeni_dealerova_skore.config(text="Skóre: 21")
+    else:
+        Dealerova_11_esa=0
+        Dealerovo_skore=Dealerovy_karty[0].hodnota+Dealerovy_karty[1].hodnota
+        if Dealerovy_karty[0].typ=="A":
+            Dealerova_11_esa+=1
+        if Dealerovy_karty[1].typ=="A":
+            Dealerova_11_esa+=1
+        while Dealerova_11_esa>0 and Dealerovo_skore>21:
+            Dealerovo_skore+=-10
+            Dealerova_11_esa+=-1
+        Zobrazeni_dealerovych_karet.config(text="Karty: "+konvertor_balicku(Dealerovy_karty))
+        Dealerovo_skore=Dealerovy_karty[0].hodnota+Dealerovy_karty[1].hodnota
+        Zobrazeni_dealerova_skore.config(text="Skóre: "+str(Dealerovo_skore))
+        while Dealerovo_skore<17:
+            Dealerovy_karty.append(Hraci_balicek.Lizni_Kartu())
+            Dealerovo_skore=Dealerovo_skore+Dealerovy_karty[-1].hodnota
+            if Dealerovy_karty[-1].typ=="A":
+                Dealerova_11_esa+=1
+            while Dealerova_11_esa>0 and Dealerovo_skore>21:
+                Dealerova_11_esa+=-1
+                Dealerovo_skore+=-10
+            Zobrazeni_dealerovych_karet.config(text="Karty: "+konvertor_balicku(Dealerovy_karty))
+            Zobrazeni_dealerova_skore.config(text="Skóre: "+str(Dealerovo_skore))
+
+# Funkce na kontrolu rozpočtu. Volána ve widgetech na řádku 1907 a 1908
+
 def Kontrala_rozpoctu(vstup):
     if vstup == "": 
         return True
@@ -396,6 +486,8 @@ def Kontrala_rozpoctu(vstup):
         return True
     else:
         return False
+
+# Funkce rozmístí widgety pro zadání úrovní hráčů a zavře widgety z první stránky (která se otevírá v hlavním porgramu).
 
 def Nastaveni_hracu_zobrazit():
     Zadavani_urovne_nadpis.pack()
@@ -437,6 +529,8 @@ def Nastaveni_hracu_zobrazit():
 
     Potvrzeni_urovni.place(relx=1.0, rely=1.0, anchor="se",x=-10, y=-10)
 
+#Funkce nastaví hodnoty proměnných a zároveň a v příapdě, že rozpočet byl zadán správně, posunu hru vpřed. Navíc zavře již nepotřebné widgety.
+
 def Potvrdit_zaklad():
     global Rozpocet
     global Pocet_balicku
@@ -461,6 +555,8 @@ def Potvrdit_zaklad():
         Nastaveni_hracu_zobrazit()
     else:
         Spatny_Rozpocet.pack()
+
+#Následující funkce kontrolují, zda hráč nezvolil u hráče manuální ovládání a pokud ano, otevřou políčko pro zadání jména.
 
 def Vypsani_urovne_1(event):
     vybrana_uroven = Uroven_prvniho_hrace_vyber.curselection()
@@ -534,6 +630,9 @@ def Kontrola_urovni():
         Potvrdit_urovne()
     else:
         Spatne_urovne.pack(side="bottom")
+
+#Funkce, ve které se vytváří hráči. Jelikož předem neznáme počet hráčů a jelikož pro každého hráče můme různé proměnné, je tento kód poměrně dlouhý, přestože se v něm
+#většinou opakuje to stejné dokola. Tato sitauce se v celém kódu objevuje častěji ze stejného důvodu.
 
 def Potvrdit_urovne():
     global Hraci
@@ -616,6 +715,9 @@ def Potvrdit_urovne():
 def Konvertor_urovni(Uroven):
     return Urovne.index(Uroven)
 
+# Funkce, která primárne nastaví základní rozhraní. Tato funkce je volána i v případě, že uživatel se na konci kola rozhodne pro další hru. Celé rozhraní je pro každé kolo
+# přenastavováno z toho důvodu, že na konci kola mohl někdo zkrachovat.
+
 def Zacatek_kola():
 
     global Dealerovy_karty
@@ -694,7 +796,6 @@ def Zacatek_kola():
     Sazka_hrace_1 = tk.Scale(Sazkovy_frame,from_=1,to=Hraci[0].rozpocet*0.4,orient="horizontal", length=200, sliderlength=20, showvalue=True)
     if Hraci[0].uroven==0:
         Jen_boti = False
-
 
     Potvrdit_sazky = tk.Button(Okno, text="Potvrdit sázky", command=PotvrditSazky, font=("Arial",10))
 
@@ -836,6 +937,8 @@ def Zacatek_kola():
         hrac.S11E1=0
         hrac.S11E2=0
 
+# Funcke rozdává karty a přepíše informace v rozhraní.
+
 def Rozdej_karty():
 
     global Dealeruv_BlackJack
@@ -949,6 +1052,8 @@ def PotvrditSazky():
     Rozdavani_karet_napis.pack()
     Okno.after(3000, Rozdej_karty)
 
+# Funkce pojišťování se volá v případě, že ve hře je hráč ovládaný manuálně. Funkce využívá booleanvar díky čemu se rychle získává údaj TRUE/FALSE z checkbuttonu.
+
 def pojistovani():
 
     global Pojistovani_1
@@ -1000,6 +1105,9 @@ def pojistovani():
     else:
         Potvrzeni_pojisteni = tk.Button(Okno, text="Pokračovat", command=vyhodnoceni_pojisteni, font=("Arial",10))
         Potvrzeni_pojisteni.place(relx=1.0, rely=1.0, anchor="se",x=-10, y=-10)
+
+# Funkce vypíše, zda se hráči pojistili, či nikoliv. Opět se jedná o dlouhou funkci, ve které se většinou opakuje podobný text. Je to z důvodu rozdílných proměnných
+# pro hráče a faktu, že počet hráčů je proměnlivý.
 
 def vyhodnoceni_pojisteni():
 
@@ -1105,6 +1213,8 @@ def konvertor_balicku(balicek):
     for karta in balicek:
         string += karta.nazev() + ', '
     return string[:-2] 
+
+# Následující funkce zavolají buďto tah bota nebo tah hráče. Zároveň zvýrazňují hráče, který je na tahu.
 
 def hra_1():
 
@@ -1279,6 +1389,8 @@ def hra_5():
         else:
             tah_hrace(Hraci[4], Zobrazeni_skore_hrace_5, Zobrazeni_sazky_hrce_5, Zobrazeni_rozpoctu_hrace_5, Zobrazeni_karet_hrace_5)
 
+# Funkce určí první tah dle Rozhodovaci_funkce_prvni_tah a dle něj následně pokračuje dle typů jednotlivých tahů. 
+
 def tah_bota(hrac, ukazatel_skore, ukazatel_sazky, ukazatel_rozpoctu, ukazatel_karet):
 
     tah=hrac.Rozhodovaci_Funkce_Prvni_Tah(Dealerovy_karty[0].hodnota)
@@ -1375,6 +1487,9 @@ def tah_bota(hrac, ukazatel_skore, ukazatel_sazky, ukazatel_rozpoctu, ukazatel_k
             if hrac.karty[-1].typ=="A":
                 hrac.jedenactkova_esa+=1
             hrac.skore=hrac.skore+hrac.karty[-1].hodnota
+
+# Zde je viděn příklad toho, kterak dochází k využívání proměnné jedenáctková esa.
+
             while hrac.jedenactkova_esa>0 and hrac.skore>21:
                 hrac.jedenactkova_esa+=-1
                 hrac.skore+=-10
@@ -1382,6 +1497,8 @@ def tah_bota(hrac, ukazatel_skore, ukazatel_sazky, ukazatel_rozpoctu, ukazatel_k
             if hrac.skore>21:
                 break
             tah=Rozhodovaci_funkce(hrac.uroven,hrac.skore,Dealerovy_karty[0].hodnota)
+
+# Funkce otevře tlačítka pro první tah, podle toho, které uživatel zmáčkne, tím směrem se hra bude vyvíjet.
 
 def tah_hrace(Hrac, Ukazatel_skore, Ukazatel_sazky, Ukazatel_rozpoctu, Ukazatel_karet):
 
@@ -1494,7 +1611,6 @@ def Hit(hrac, ukazatel_karet, ukazatel_skore):
             Stand_tlacitko.pack(side="right")
             HS_otevreno = True
 
-
 def Split(hrac, ukazatel_sazky, ukazatel_rozpoctu, ukazatel_karet, ukazatel_skore):
 
     Frame_na_prvni_akci.pack_forget()
@@ -1593,80 +1709,7 @@ def Split_stand_2(hrac):
     Frame_na_druhy_split_akce.pack_forget()
     Stand(hrac)
 
-def Dealeruv_tah():
-
-    Spustit_vyhodnocovani.place(relx=1.0, rely=1.0, anchor="se",x=-10, y=-10)
-    Zacit_dealeruv_tah.place_forget()
-    Ukazatel_BlackJacku.pack_forget()
-
-    if Pocet_hracu==1:
-        Okno_hrac_1.config(bg="#eddd72")
-        Jmeno_hrac_1.config(bg="#eddd72")
-        Zobrazeni_karet_hrace_1.config(bg="#eddd72")
-        Zobrazeni_sazky_hrce_1.config(bg="#eddd72")
-        Zobrazeni_rozpoctu_hrace_1.config(bg="#eddd72")
-        Zobrazeni_skore_hrace_1.config(bg="#eddd72")
-    elif Pocet_hracu==2:
-        Okno_hrac_2.config(bg="#eddd72")
-        Jmeno_hrac_2.config(bg="#eddd72")
-        Zobrazeni_karet_hrace_2.config(bg="#eddd72")
-        Zobrazeni_sazky_hrce_2.config(bg="#eddd72")
-        Zobrazeni_rozpoctu_hrace_2.config(bg="#eddd72")
-        Zobrazeni_skore_hrace_2.config(bg="#eddd72")  
-    elif Pocet_hracu==3:
-        Okno_hrac_3.config(bg="#eddd72")
-        Jmeno_hrac_3.config(bg="#eddd72")
-        Zobrazeni_karet_hrace_3.config(bg="#eddd72")
-        Zobrazeni_sazky_hrce_3.config(bg="#eddd72")
-        Zobrazeni_rozpoctu_hrace_3.config(bg="#eddd72")
-        Zobrazeni_skore_hrace_3.config(bg="#eddd72") 
-    elif Pocet_hracu==4:
-        Okno_hrac_4.config(bg="#eddd72")
-        Jmeno_hrac_4.config(bg="#eddd72")
-        Zobrazeni_karet_hrace_4.config(bg="#eddd72")
-        Zobrazeni_sazky_hrce_4.config(bg="#eddd72")
-        Zobrazeni_rozpoctu_hrace_4.config(bg="#eddd72")
-        Zobrazeni_skore_hrace_4.config(bg="#eddd72") 
-    else:
-        Okno_hrac_5.config(bg="#eddd72")
-        Jmeno_hrac_5.config(bg="#eddd72")
-        Zobrazeni_karet_hrace_5.config(bg="#eddd72")
-        Zobrazeni_sazky_hrce_5.config(bg="#eddd72")
-        Zobrazeni_rozpoctu_hrace_5.config(bg="#eddd72")
-        Zobrazeni_skore_hrace_5.config(bg="#eddd72") 
-
-    global Dealerovy_karty
-    global Hraci_balicek
-    global Dealerovo_skore
-
-    if Dealeruv_BlackJack:
-        Ukazatel_BlackJacku.config(text="Dealer má BLACKJACK!")
-        Ukazatel_BlackJacku.pack()
-        Zobrazeni_dealerovych_karet.config(text="Karty: "+konvertor_balicku(Dealerovy_karty))
-        Zobrazeni_dealerova_skore.config(text="Skóre: 21")
-    else:
-        Dealerova_11_esa=0
-        Dealerovo_skore=Dealerovy_karty[0].hodnota+Dealerovy_karty[1].hodnota
-        if Dealerovy_karty[0].typ=="A":
-            Dealerova_11_esa+=1
-        if Dealerovy_karty[1].typ=="A":
-            Dealerova_11_esa+=1
-        while Dealerova_11_esa>0 and Dealerovo_skore>21:
-            Dealerovo_skore+=-10
-            Dealerova_11_esa+=-1
-        Zobrazeni_dealerovych_karet.config(text="Karty: "+konvertor_balicku(Dealerovy_karty))
-        Dealerovo_skore=Dealerovy_karty[0].hodnota+Dealerovy_karty[1].hodnota
-        Zobrazeni_dealerova_skore.config(text="Skóre: "+str(Dealerovo_skore))
-        while Dealerovo_skore<17:
-            Dealerovy_karty.append(Hraci_balicek.Lizni_Kartu())
-            Dealerovo_skore=Dealerovo_skore+Dealerovy_karty[-1].hodnota
-            if Dealerovy_karty[-1].typ=="A":
-                Dealerova_11_esa+=1
-            while Dealerova_11_esa>0 and Dealerovo_skore>21:
-                Dealerova_11_esa+=-1
-                Dealerovo_skore+=-10
-            Zobrazeni_dealerovych_karet.config(text="Karty: "+konvertor_balicku(Dealerovy_karty))
-            Zobrazeni_dealerova_skore.config(text="Skóre: "+str(Dealerovo_skore))
+# Funkce ukazuje konečné zisky hráčů. 
 
 def ukazka_vyhodnoceni():
 
@@ -1781,6 +1824,8 @@ def zaverecka():
     else:
         Konec()  
 
+# Vyyskakovací okno informujíce o krachu. V závislosti na počtu krachujících se mění text.
+
 def ukaz_zkrachovale():
 
     oznameni = tk.Toplevel(Okno)
@@ -1812,6 +1857,8 @@ def Konec():
     Konecne_pozadi.pack()
     Okno.after(5000,sys.exit)
 
+#Základní a nezbytné proměnné a množina jmen pro boty.
+
 Pocet_hracu=0
 Pocet_balicku=0
 Rozpocet=0
@@ -1825,7 +1872,7 @@ Jmena={"Adam", "Alexandr", "Anna", "Augustýn", "Barbora", "Bernard", "Bertrúda
       "Petr", "Prokop", "Přemysl", "Roman", "Řehoř", "Sebastián", "Servác", "Soňa", "Spytihněv", "Šimon", 
       "Štěpán", "Tadeáš", "Thea", "Theodor", "Tomáš", "Vavřinec", "Věnceslav", "Vojta", "Zuzana", "Žaneta"} 
 
-Dalsi_Hra=True
+# Vytvoření hlavního okna, včetně ikony a titulu.
 
 Okno = tk.Tk()
 ikona=tk.PhotoImage(file="Ikona.png")
@@ -1834,6 +1881,8 @@ Okno.iconphoto(True, ikona)
 Okno.geometry("1020x560")
 
 Urovne=["Manuální ovládání","Opilec","Začátečník","Pokročilý","Profesionál"]
+
+#Widgety z prvního obrazu. Label nadpis zůstává po celou dobu hry. Dochází rovnou i k otevření widgetů.
 
 Nadpis=tk.Label(Okno,text="BLACKJACK",font=("Arial",40,"bold"),fg="#c94024",bg="black",relief="raised",bd=10)
 Nadpis.pack()
@@ -1853,6 +1902,8 @@ Posuvnik_ZadejtePocetBalicku.pack()
 Text_ZadejteRozpocet = tk.Label(Okno, text="Počáteční rozpočet",font=("Arial",15))
 Text_ZadejteRozpocet.pack()
 
+#Kontrolka na rozpočet, která kontroluje zda není zadáván příliš vysoký rozpočet.
+
 Kontrolka = Okno.register(Kontrala_rozpoctu)
 Nastaveni_rozpoctu = tk.Entry(Okno, validate="key", validatecommand=(Kontrolka, "%P"), width=8, justify="center")
 Nastaveni_rozpoctu.pack()
@@ -1863,6 +1914,8 @@ Potvrdit_zakladni_vstup.place(relx=1.0, rely=1.0, anchor="se",x=-10, y=-10)
 Spatny_Rozpocet = tk.Label(Okno, text="Rozpočet musí být minimálně 100", font=("Arial",12),fg="red")
 
 Zadavani_urovne_nadpis = tk.Label(Okno, text="Nastavte úroveň hráčů", font=("Arial",15),fg="#085c25", pady="15")
+
+# Vytvoření framu, ve kterých uživatel vybírá úroveň hráčů. Včetně labelů do kterých se hodnota přenáší pomocí funkce stringvar()
 
 Frame_na_urovne=tk.Frame(Okno)
 Frame_urovne_1=tk.Frame(Frame_na_urovne)
@@ -1920,11 +1973,7 @@ Uroven_tretiho_hrace_vyber.config(height=Uroven_tretiho_hrace_vyber.size())
 Uroven_ctvrteho_hrace_vyber.config(height=Uroven_ctvrteho_hrace_vyber.size())
 Uroven_pateho_hrace_vyber.config(height=Uroven_pateho_hrace_vyber.size())
 
-Uroven_prvniho_hrace_vyber.select_set(4)
-Uroven_druheho_hrace_vyber.select_set(4)
-Uroven_tretiho_hrace_vyber.select_set(4)
-Uroven_ctvrteho_hrace_vyber.select_set(4)
-Uroven_pateho_hrace_vyber.select_set(4)
+# Inicializace některých widgetů, primárně tlačítek na pokračování.
 
 Potvrzeni_urovni = tk.Button(Okno, text="Pokračovat", command=Kontrola_urovni, font=("Arial",10))
 
@@ -1965,6 +2014,8 @@ HS_otevreno = False
 Pozadi_konec = tk.PhotoImage(file="konec.png")
 
 Konecne_pozadi = tk.Label(Okno, image=Pozadi_konec)
+
+# Přidání položek do listboxů, ve kterých uživatel vybírá úroveň.
 
 for i in range(5):
     Uroven_prvniho_hrace_vyber.insert(i+1,Urovne[i])

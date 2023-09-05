@@ -1,33 +1,14 @@
 import random
 import time
-import tkinter as tk
-
-Okno = tk.Tk()
-Okno.geometry("800x800")
-ikona=tk.PhotoImage(file="Ikona.png")
-Okno.title("BlackJack")
-Okno.iconphoto(True, ikona)
-Okno.geometry("1020x560")
-Nadpis=tk.Label(Okno,text="BLACKJACK",font=("Arial",40,"bold"),fg="#c94024",bg="black",relief="raised",bd=10)
-Nadpis.pack()
-
-Text_ZadejtePocetHracu = tk.Label(Okno, text="Nastavte počet hráčů:")
-Text_ZadejtePocetHracu.pack()
-
-Posuvnik_ZadejtePocetHracu = tk.Scale(Okno, from_=1, to=5, orient="horizontal", length=200, sliderlength=20, showvalue=True)
-Posuvnik_ZadejtePocetHracu.pack()
-
-Text_ZadejtePocetHracu = tk.Label(Okno, text="Nastavte počet balíčků:")
-Text_ZadejtePocetHracu.pack()
-
-Posuvnik_ZadejtePocetBalicku = tk.Scale(Okno, from_=1, to=8, orient="horizontal", length=200, sliderlength=20, showvalue=True)
-Posuvnik_ZadejtePocetBalicku.pack()
 
 class Karta:
     def __init__(self, barva, typ, hodnota):
         self.barva=barva
         self.typ=typ
         self.hodnota=int(hodnota)
+    def nazev(self):
+        Nazev=(self.barva+" "+self.typ)
+        return Nazev
 
 class Balicek:
     def __init__(self):
@@ -425,7 +406,7 @@ def Dealeruv_tah():
     while esa>0 and skore>21:
         skore+=-10
         esa+=-1
-    print("Dealerovy karty jsou "+Dealerovy_karty[0].barva+" "+Dealerovy_karty[0].typ+ " a "+Dealerovy_karty[1].barva+" "+Dealerovy_karty[1].typ)
+    print("Dealerovy karty jsou "+Dealerovy_karty[0].nazev()+ " a "+Dealerovy_karty[1].nazev())
     time.sleep(1)
     print("Dealerovo skore je: "+str(skore))
     while skore<17:
@@ -437,7 +418,7 @@ def Dealeruv_tah():
             esa+=-1
             skore+=-10
         time.sleep(1)            
-        print("Dealer si líznul: "+Dealerovy_karty[-1].barva+" "+Dealerovy_karty[-1].typ)
+        print("Dealer si líznul: "+Dealerovy_karty[-1].nazev())
         time.sleep(0.5)
         print("Dealerovo skore je: "+str(skore))
     if skore>21:
@@ -536,7 +517,7 @@ def Rozhodovaci_funkce(uroven,skore,dealer):
     else:
         return random.choice(["Stand","Hit"])
 
-Okno.mainloop()
+# Vytvoření karet ručně (rozdíl oproti druhé verzi programu).
 
 Srdcova_dvojka=Karta("Srdce","2",2)
 Srdcova_trojka=Karta("Srdce","3",3)
@@ -596,6 +577,8 @@ Listove_eso=Karta("Listy","A",11)
 
 Jmena={"Marek", "Jan", "Petr", "Šimon", "Lukáš", "Zuzana", "Klára", "Roman", "Denis", "Vojta", "Adam", "Alexandr", "Kryštof", "Barbora", "Karel", "Anna", "Eliška", "Jiří", "Pankrác", "Josefína", "Bertrúda", "Kazimír", "Prokop", "Řehoř", "Ondřej", "Soňa", "Mirek", "Jiřina", "Věnceslav", "Tomáš", "Oliver", "Chrudoš", "Vavřinec", "Bernard", "Augustýn", "Spytihněv", "Karolína", "Štěpán", "Filip", "Norbert", "František", "Přemysl", "Luboš", "David", "Servác", "Bonifác", "Bohuslava", "Celestýna"} 
 
+#Základní údaje. Probíhá zda kontrola zadání jak pomocí try/except, tak pomocí while cyklů na chybu (v případě, že třeba uživatel dává příliš velký počet hráčů).
+
 while True:
     try:
         Pocet_hracu = int(input("Zadej v kolika hráčích chceš hrát! Rozmezí jedna až pět! "))
@@ -608,6 +591,8 @@ while True:
 
 Hraci=[]
 time.sleep(0.5)
+
+# Vytvoření hráčů a jejich přidání do seznamu Hraci.
 
 for i in range (Pocet_hracu):
     while True:
@@ -669,7 +654,11 @@ for hrac in Hraci:
 
 Dalsi_Hra=True
 
+# Hlavní while loop, ve kterém probíhá jednotlivé kolo.
+
 while Dalsi_Hra:
+
+# Vytvoření sázek
 
     for hrac in Hraci:
         if hrac.uroven<5:
@@ -691,6 +680,8 @@ while Dalsi_Hra:
             hrac.rozpocet=hrac.rozpocet-hrac.sazka
             print(hrac.jmeno+" sází "+str(hrac.sazka)+" korun!")
             time.sleep(1.5)
+
+#Nastavení některých proměnných na výchozí hodnoty.
 
     Dealerovy_karty=[]
     Dealerovo_skore=0
@@ -736,11 +727,14 @@ while Dalsi_Hra:
 
 
     time.sleep(1)
-    print("Dealerova první karta je: "+Dealerovy_karty[0].barva+" "+Dealerovy_karty[0].typ)
+    print("Dealerova první karta je: "+Dealerovy_karty[0].nazev())
     time.sleep(1)
+
+# For cyklus, ve kterém probíhají tahy jednotlivých hráčů.
+
     for hrac in Hraci:
 
-        print(hrac.jmeno+" Má v ruce: "+hrac.karty[0].barva+" "+hrac.karty[0].typ+" a "+hrac.karty[1].barva+" "+hrac.karty[1].typ)
+        print(hrac.jmeno+" Má v ruce: "+hrac.karty[0].nazev()+" a "+hrac.karty[1].nazev())
         time.sleep(0.5)
         print("Hodnota těchto karet je: "+str(hrac.skore))
         time.sleep(1)
@@ -783,7 +777,7 @@ while Dalsi_Hra:
                     hrac.SSkore1+=-10
                     hrac.S11E1+=-1
                 time.sleep(1)
-                print(hrac.jmeno+" má v první várce tyto karty: "+hrac.SKarty1[0].barva+" "+hrac.SKarty1[0].typ+" a "+hrac.SKarty1[1].barva+" "+hrac.SKarty1[1].typ)
+                print(hrac.jmeno+" má v první várce tyto karty: "+hrac.nazev()+" a "+hrac.SKarty1[1].nazev())
                 time.sleep(0.8)
                 print("Skóre těchto karet je: "+str(hrac.SSkore1))
                 time.sleep(1)
@@ -793,7 +787,7 @@ while Dalsi_Hra:
                 while hrac.SSkore2>21 and hrac.S11E2>0:
                     hrac.SSkore2+=-10
                     hrac.S11E2+=-1              
-                print(hrac.jmeno+" má v druhé várce tyto karty: "+hrac.SKarty2[0].barva+" "+hrac.SKarty2[0].typ+" a "+hrac.SKarty2[1].barva+" "+hrac.SKarty2[1].typ)
+                print(hrac.jmeno+" má v druhé várce tyto karty: "+hrac.SKarty2[0].nazev()+" a "+hrac.SKarty2[1].nazev())
                 time.sleep(0.8)
                 print("Skóre těchto karet je: "+str(hrac.SSkore2))
                 time.sleep(1)
@@ -803,7 +797,7 @@ while Dalsi_Hra:
                     while tah=="Hit":
                         print(hrac.jmeno+" si líže další kartu!")
                         hrac.SKarty1.append(Hraci_balicek.Lizni_Kartu())
-                        print(hrac.jmeno+" má novou kartu a tou je "+hrac.SKarty1[-1].barva+" "+hrac.SKarty1[-1].typ)
+                        print(hrac.jmeno+" má novou kartu a tou je "+hrac.nazev())
                         if hrac.SKarty1[-1].typ=="A":
                             hrac.S11E1+=1
                         hrac.SSkore1=hrac.SSkore1+hrac.SKarty1[-1].hodnota
@@ -830,7 +824,7 @@ while Dalsi_Hra:
                     while tah=="Hit":
                         print(hrac.jmeno+" si líže další kartu!")
                         hrac.SKarty2.append(Hraci_balicek.Lizni_Kartu())
-                        print(hrac.jmeno+" má novou kartu a tou je "+hrac.SKarty2[-1].barva+" "+hrac.SKarty2[-1].typ)
+                        print(hrac.jmeno+" má novou kartu a tou je "+hrac.SKarty2[-1].nazev())
                         if hrac.SKarty2[-1].typ=="A":
                             hrac.S11E2+=1
                         hrac.SSkore2=hrac.SSkore2+hrac.SKarty2[-1].hodnota
@@ -859,7 +853,7 @@ while Dalsi_Hra:
                 hrac.rozpocet=hrac.rozpocet-hrac.sazka
                 hrac.sazka=hrac.sazka*2
                 hrac.karty.append(Hraci_balicek.Lizni_Kartu())
-                print("Nová karta je "+hrac.karty[2].barva+" "+hrac.karty[2].typ)
+                print("Nová karta je "+hrac.karty[2].nazev())
                 hrac.skore=hrac.skore+hrac.karty[2].hodnota
                 if hrac.karty[2].typ=="A":
                     hrac.jedenactkova_esa+=1
@@ -880,7 +874,7 @@ while Dalsi_Hra:
                     print(hrac.jmeno+" si líže další kartu!")
                     hrac.karty.append(Hraci_balicek.Lizni_Kartu())
                     time.sleep(1)
-                    print(hrac.jmeno+" má novou kartu a tou je "+hrac.karty[-1].barva+" "+hrac.karty[-1].typ)
+                    print(hrac.jmeno+" má novou kartu a tou je "+hrac.karty[-1].nazev())
                     if hrac.karty[-1].typ=="A":
                         hrac.jedenactkova_esa+=1
                     hrac.skore=hrac.skore+hrac.karty[-1].hodnota
@@ -900,7 +894,9 @@ while Dalsi_Hra:
                 time.sleep(2)
 
     Dealerovo_skore=Dealeruv_tah()
-    
+
+# Vyhodnocování a určení výher.
+
     for hrac in Hraci:
         vyhra=0
         vyhra1=0
@@ -935,7 +931,9 @@ while Dalsi_Hra:
             Hraci.remove(hrac)
             Pocet_hracu+=-1
     time.sleep(0.8)
-    
+
+# Nastavení toho, zda má proběhnout další kolo. Odpověď ne ukončí while cyklus.
+
     if Pocet_hracu>0:
         print("Chceš dát další hru?")
         Nova_hra=str(input()).upper()
