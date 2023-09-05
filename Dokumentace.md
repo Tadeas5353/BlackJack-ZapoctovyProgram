@@ -154,7 +154,7 @@ Během této funkce proběhne vyhodnocení sázek každého hráče a následně
 
 ### Zaverecka
 
-Funkce kontroluje, zda některý z hráčů nezkrachoval a v případě, že někdo ano, vyřadí ho za hry. Dá uživateli možnost ukončit hru nebo dát nové kolo.
+Funkce kontroluje, zda některý z hráčů nezkrachoval a v případě, že někdo ano, vyřadí ho za hry. Dá uživateli možnost ukončit hru nebo dát nové kolo. Pokud hráč chce nové kolo, zavolá se znovu funkce zacatek_kola a celý proces jede od znovu. Pokud hráč chce skončit, zavolá se funkce konec.
 
 ### Ukaz_zkrachovale
 
@@ -163,3 +163,16 @@ V případě, že některý hráč zkrachuje, tato funkce otevře vyskakovací o
 ### Konec
 
 Pokud hráč chce ukončit hru nebo pokud všichni hráči zkrachují, otevře tato funkce závěrečné pozadí a po pěti vteřinách ukončí program.
+
+## Hlavní část kódu
+
+Většina programu probíhá skrze výše zmíněnné funkce. V hlavní části kódu jsou tak primárně pouze pojmenovány některé objekty, hlavně widgety z Tkinter knihovny.
+Dále tu je seznam jmen, inicializace proměmných jako Pocet_hracu nebo Pocet_balicku. Nebo proměnná HS_otevreno, která zaznamenává, zda je otevřený label s tlačítky na Hit a Stand. (Podle čehož se určuje, zda se má otevřít, či nikoliv).
+
+## Textová verze hry
+
+Textová verze hry se od té s rozhraním liší primárně v tom, jak hra porbíhá. Nedochází zde k postupnému volání funkcí. Nejprve dojde k nastavení základnách údajů jako jsou úrovně nebo rozpočet a po té se spustí while loop, který běží do té doby, dokud je proměnná dalsi_hra nastavena na True. Jedne průchod tímto loopem symbolizuje jedno kolo. 
+
+Na začátku kola jsou rozdány karty a dojde k nastavení sázek. Po té přichází na řadu for loop, který pro každého jednoho hráče v seznamu Hraci odehraje hru. Kód v této fázi je velice podobný kódu z funkce tah_bota. Rozdíl je primárně v textových výpisech a v tom, že rozhodovací funkce se nyní volá i na hráče. Po skončení for loopu proběhne dealerův tah a vyhodnocení. Následně uživatel zvolí, zda chce pokračovat. Pokud řekne, že ne, proměnná Dalsi_hra se nastaví na False, čímž skončí while cyklus a hra může skončit.
+
+Pro pocit plynulosti a dobrou čitelnost a hratelnost je program uměle zpomalován funkcí time.sleep().
