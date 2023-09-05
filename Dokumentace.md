@@ -9,6 +9,8 @@ Vysoký počet funkcí je primárně z důvodu využívání knihovny Tkinter. N
 
 ## Třídy
 
+Jak již bylo zmíněno. Kód obsahuje tři třídy. Každá z nich nám definuje některý důležitý aspekt hry. 
+
 ### Karta
 
 Objekt třídy karta obsahuje tři parametry. Údaj o barvě, typu a hodnotě. A funkci "nazev", tato funkce slouží k vypsání názvu kartu.
