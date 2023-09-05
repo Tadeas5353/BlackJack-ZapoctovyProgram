@@ -1,5 +1,5 @@
 # BlackJack-ZapoctovyProgram
-Zápočtový program z předmětu Programování 2 na MFF UK Praha. Autor: Tadeáš Janků
+Zápočtový program z předmětu Programování 2 na MFF UK Praha. Autor: Tadeáš Janků. Hru s rozhraním je doporučeno hrát v nezvětšeném okně.
 
 ## Začátek hry
 Jedná se o klasický BlackJack, který můžete znát z casin. Nicméně nehraje se o skutečné peníze.
