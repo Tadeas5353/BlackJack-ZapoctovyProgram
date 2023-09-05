@@ -29,6 +29,8 @@ Počet jedenáctkových es (vysvětlení níže), aktuální skóre hráčových
 Atribut jedenáctkových es slouží k zaznamenávání toho, kolik es v rukou hráče má hra brát s hodnotou 11. Pokud hráči přijde do rukou eso, tento atribut se zvedne o jedna. Pokud hráčovo skóre překročí 21, hra se
 koukne zda hráč má nějaké eso s hodnotou jedenáct a pokud ano, tak skóre sníží o deset a počet jedenáctkových es o jedno.
 
+Atribut úroveň značí schopnosti hráče. Je reprezentován číslem od nuly do pěti. Nula značí manuální ovládání. Jedna pak nejslabšího hráče, čtyři naopak nejsilnějšího. Podorobněji jsou úrovně popsány v návodu ke hře.
+
 Třída obsahuje ještě dvě funkce. Rozhodovací funkci pro první tah, která slouží u botů k určení prvního tahu (v případě textové verze si v ní i hráč volí svůj tah) a pojišťovací funkci, která slouží u botů (u
 textové verze opět i u o hráčem ovládaných hráčů) k rozhodnutí o tom, zda se pojistit, či nikoliv.
 
